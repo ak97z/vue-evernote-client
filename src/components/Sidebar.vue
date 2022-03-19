@@ -26,7 +26,7 @@ export default {
 
 </script>
 
-<style scoped >
+<style scoped  lang="less">
 #sidebar {
   position: relative;
   width: 56px;
@@ -35,10 +35,10 @@ export default {
 }
 .icons {
   margin-top: 15px;
-}
-.icons a {
-  padding: 6px 0;
-  display: block;
+  a {
+    padding: 6px 0;
+    display: block;
+  }
 }
 .icons .router-link-active {
   background-color: #5e6266;
