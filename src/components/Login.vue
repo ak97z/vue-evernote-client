@@ -7,7 +7,7 @@
           <div class="form">
             <h3 @click="showRegister">创建账户</h3>
             <transition name="slide">
-              <div v-bind:class="{show:isShowRegister}"  class="register">
+              <div v-bind:class="{show:isShowRegister}" class="register">
                 <input type="text" v-model="register.username" placeholder="用户名">
                 <input type="password" v-model="register.password" placeholder="密码">
                 <p v-bind:class="{error: register.isError}">{{ register.notice }}</p>
@@ -16,7 +16,7 @@
             </transition>
             <h3 @click="showLogin">登录</h3>
             <transition name="slide">
-              <div v-bind:class="{show:isShowLogin}"  class="login">
+              <div v-bind:class="{show:isShowLogin}" class="login">
                 <input type="text" v-model="login.username" placeholder="输入用户名">
                 <input type="password" v-model="login.password" placeholder="密码">
                 <p v-bind:class="{error: login.isError}">{{ login.notice }}</p>
@@ -31,6 +31,13 @@
 </template>
 
 <script>
+
+import request from '@/helpers/request'
+
+request('/auth')
+  .then(data => {
+    console.log(data)
+  })
 export default {
   name: 'Login',
   data() {
@@ -78,6 +85,14 @@ export default {
       this.register.isError = false
       this.register.notice = ''
       console.log('开始注册' + 'username' + this.register.username + 'password' + this.register.password);
+      request('/auth/register', 'POST',
+        {
+          username: this.register.username,
+          password: this.register.password
+        })
+        .then(data => {
+          console.log(data)
+        })
     },
     onLogin() {
       let result1 = this.validUsername(this.login.username)
@@ -95,6 +110,14 @@ export default {
       this.login.isError = false
       this.login.notice = ''
       console.log('开始登录' + 'username' + this.login.username + 'password' + this.login.password);
+      request('/auth/login', 'POST',
+        {
+          username: this.login.username,
+          password: this.login.password
+        })
+        .then(data=>{
+          console.log(data)
+        })
     },
     validUsername(username) {
       return {
