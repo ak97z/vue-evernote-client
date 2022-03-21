@@ -32,9 +32,9 @@
 
 <script>
 
-import request from '@/helpers/request'
+import Auth from '@/apis/auth'
 
-request('/auth')
+Auth.getInfo()
   .then(data => {
     console.log(data)
   })
@@ -85,8 +85,7 @@ export default {
       this.register.isError = false
       this.register.notice = ''
       console.log('开始注册' + 'username' + this.register.username + 'password' + this.register.password);
-      request('/auth/register', 'POST',
-        {
+      Auth.register({
           username: this.register.username,
           password: this.register.password
         })
@@ -110,8 +109,7 @@ export default {
       this.login.isError = false
       this.login.notice = ''
       console.log('开始登录' + 'username' + this.login.username + 'password' + this.login.password);
-      request('/auth/login', 'POST',
-        {
+     Auth.login({
           username: this.login.username,
           password: this.login.password
         })
