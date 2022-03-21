@@ -6,8 +6,8 @@
       <router-link to="/notebooks" title="笔记本"><i class="iconfont icon-notebook"></i></router-link>
       <router-link to="/trash" title="回收站"><i class="iconfont icon-trash"></i></router-link>
     </div>
-    <div class="logout">
-      <i class="iconfont icon-logout"></i>
+    <div class="logout" >
+      <i class="iconfont icon-logout" @click="logout"></i>
     </div>
   </div>
 </template>
@@ -26,6 +26,7 @@ export default {
       console.log('logout')
       Auth.logout()
         .then(data => {
+          this.$router.push({path:'login'})
           console.log(data)
         })
     }
