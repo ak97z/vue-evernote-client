@@ -33,6 +33,7 @@
 <script>
 
 import Auth from '@/apis/auth'
+import bus from '@/helpers/bus'
 
 Auth.getInfo()
   .then(data => {
@@ -90,6 +91,7 @@ export default {
         .then(data => {
           this.register.isError = false
           this.register.notice = ''
+          bus.$emit('userInfo', {username: this.register.username})
           this.$router.push({path: 'notebooks'})
           console.log('开始注册' + 'username' + this.register.username + 'password' + this.register.password);
         }).catch(data => {
@@ -117,6 +119,7 @@ export default {
         .then(data => {
           this.login.isError = false
           this.login.notice = ''
+          bus.$emit('userInfo', {username: this.login.username})
           console.log('开始登录' + 'username' + this.login.username + 'password' + this.login.password);
           this.$router.push({path: 'notebooks'})
         }).catch(data => {
