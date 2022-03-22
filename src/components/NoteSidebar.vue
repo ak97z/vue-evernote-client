@@ -26,21 +26,20 @@
 </template>
 
 <script>
+import Notebooks from '@/apis/notebooks'
+import Notes from '@/apis/notes'
 
+window.Notes = Notes
 export default {
+  created() {
+    Notebooks.getAll()
+      .then(res => {
+        this.notebooks = res.data
+      })
+  },
   data() {
     return {
-      notebooks: [
-        {
-          id: 1,
-          title: 'hello1',
-        },
-        {
-          id: 2,
-          title: 'hello2',
-          updatedAtFriendly: '3分钟前'
-        }
-      ],
+      notebooks: [],
       notes:[
         {
           id: 11,
@@ -57,8 +56,13 @@ export default {
   },
 
   methods: {
-    handleCommand(cmd) {
-      console.log(cmd)
+    handleCommand(notebookId) {
+      if(notebookId !== 'trash') {
+        Notes.getAll({ notebookId })
+          .then(res => {
+            this.notes = res.data
+          })
+      }
     }
 
   }
