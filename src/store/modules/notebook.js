@@ -29,7 +29,10 @@ const mutations = {
   },
   deleteNotebook(state, payload) {
     state.notebooks = state.notebooks.filter(notebooks => notebooks.id != payload.notebookId)
-  }
+  },
+  setCurBook(state, payload) {
+    state.curBookId = payload.curBookId
+  },
 }
 
 const actions = {
