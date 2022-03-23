@@ -27,13 +27,12 @@
 import Auth from '../apis/auth'
 import Notebooks from '../apis/notebooks'
 import {friendlyDate} from '../helpers/util'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: 'Login',
   data() {
-    return {
-      notebooks: []
-    }
+    return {}
   },
   created() {
     Auth.getInfo()
@@ -42,24 +41,31 @@ export default {
           this.$router.push({path: '/login'})
         }
       })
-    Notebooks.getAll()
-      .then(res => {
-        this.notebooks = res.data
-      })
+    this.$store.dispatch('getNotebooks')
+    // Notebooks.getAll()
+    //   .then(res => {
+    //     this.notebooks = res.data
+    //   })
+  },
+  computed: {
+    ...mapGetters(['notebooks'])
   },
   methods: {
+    ...mapActions([
+      'getNotebooks',
+      'addNotebook',
+      'updateNotebook',
+      'deleteNotebook',
+    ]),
+
     onCreate() {
       this.$prompt('输入新笔记本标题', '创建笔记本', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /^.{1,30}$/,
         inputErrorMessage: '标题不能为空，且不超过30个字符'
-      }).then(({ value }) => {
-        return Notebooks.addNotebook({ title: value })
-      }).then(res => {
-        res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
-        this.notebooks.unshift(res.data)
-        this.$message.success(res.msg)
+      }).then(({value}) => {
+        this.addNotebook({title: value})
       })
     },
     onEdit(notebook) {
@@ -70,9 +76,9 @@ export default {
         inputPattern: /^.{1,30}$/,
         inputValue: notebook.title,
         inputErrorMessage: '标题不能为空，且不超过30个字符'
-      }).then(({ value }) => {
+      }).then(({value}) => {
         title = value
-        return Notebooks.updateNotebook(notebook.id, { title })
+        return Notebooks.updateNotebook(notebook.id, {title})
       }).then(res => {
         notebook.title = title
         this.$message.success(res.msg)
