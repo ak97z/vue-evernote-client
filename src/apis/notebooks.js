@@ -1,6 +1,6 @@
 import request from "../helpers/request";
 import {friendlyDate} from '../helpers/util'
-import {resolve} from "../../build/webpack.base.conf";
+// import {resolve} from "../../build/webpack.base.conf";
 
 const URL = {
   GET: '/notebooks',
