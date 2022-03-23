@@ -26,10 +26,11 @@
 </template>
 
 <script>
-import Notebooks from '@/apis/notebooks'
-import Notes from '@/apis/notes'
+import Notebooks from '../apis/notebooks'
+import Notes from '../apis/notes'
+import Bus from '../helpers/bus'
 
-window.Notes = Notes
+
 export default {
   created() {
     Notebooks.getAll()
@@ -40,7 +41,7 @@ export default {
       }).then(res => {
       this.notes = res.data
       this.$emit('update:notes', this.notes)
-
+      Bus.$emit('update:notes', this.notes)
     })
   },
   data() {
