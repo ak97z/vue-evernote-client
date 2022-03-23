@@ -5,7 +5,7 @@
     </header>
     <main>
       <div class="layout">
-        <h3>笔记本列表{{ notebooks.length }}</h3>
+        <h3>笔记本列表({{ notebooks.length }})</h3>
         <div class="book-list">
           <router-link v-for="notebook in notebooks" :to="`/note?notebookId=${notebook.id}`" class="notebook">
             <div>
@@ -41,11 +41,12 @@ export default {
           this.$router.push({path: '/login'})
         }
       })
-    this.$store.dispatch('getNotebooks')
+
     // Notebooks.getAll()
     //   .then(res => {
     //     this.notebooks = res.data
     //   })
+    this.$store.dispatch('getNotebooks')
   },
   computed: {
     ...mapGetters(['notebooks'])
@@ -55,7 +56,7 @@ export default {
       'getNotebooks',
       'addNotebook',
       'updateNotebook',
-      'deleteNotebook',
+      'deleteNotebook'
     ]),
 
     onCreate() {
@@ -77,11 +78,7 @@ export default {
         inputValue: notebook.title,
         inputErrorMessage: '标题不能为空，且不超过30个字符'
       }).then(({value}) => {
-        title = value
-        return Notebooks.updateNotebook(notebook.id, {title})
-      }).then(res => {
-        notebook.title = title
-        this.$message.success(res.msg)
+        this.updateNotebook({ notebookId: notebook.id, title: value })
       })
     },
     onDelete(notebook) {
@@ -90,13 +87,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        return Notebooks.deleteNotebook(notebook.id)
-      }).then(res => {
-        this.notebooks.splice(this.notebooks.indexOf(notebook), 1)
-        this.$message.success(res.msg)
+        this.deleteNotebook({ notebookId: notebook.id })
       })
     }
-  },
+  }
 }
 </script>
 

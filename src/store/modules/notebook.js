@@ -1,17 +1,17 @@
 import Notebook from '@/apis/notebooks'
-import {Message} from "element-ui";
+import { Message } from 'element-ui'
 
 
 const state = {
   notebooks: null,
-  curBook: null
+  curBookId: null
 }
 
 const getters = {
   notebooks: state => state.notebooks || [],
   curBook: state => {
-    if (!Array.isArray(state.notebooks)) {return {}}
-    if (!state.curBookId) {return state.notebooks[0]}
+    if (!Array.isArray(state.notebooks)) return {}
+    if (!state.curBookId) return state.notebooks[0]
     return state.notebooks.find(notebook => notebook.id == state.curBookId) || {}
   }
 }
@@ -28,11 +28,11 @@ const mutations = {
     notebook.title = payload.title
   },
   deleteNotebook(state, payload) {
-    state.notebooks = state.notebooks.filter(notebooks => notebooks.id != payload.notebookId)
+    state.notebooks = state.notebooks.filter(notebook => notebook.id != payload.notebookId)
   },
   setCurBook(state, payload) {
     state.curBookId = payload.curBookId
-  },
+  }
 }
 
 const actions = {
@@ -53,7 +53,7 @@ const actions = {
   updateNotebook({commit}, payload) {
     return Notebook.updateNotebook(payload.notebookId, {title: payload.title})
       .then(res => {
-        commit('updateNotebook', {notebook: payload.notebookId, title: payload.title})
+        commit('updateNotebook', {notebookId: payload.notebookId, title: payload.title})
         Message.success(res.msg)
       })
   },
