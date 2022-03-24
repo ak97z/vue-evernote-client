@@ -24,9 +24,6 @@
   </div>
 </template>
 <script>
-import Auth from '../apis/auth'
-import Notebooks from '../apis/notebooks'
-import {friendlyDate} from '../helpers/util'
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
@@ -35,8 +32,8 @@ export default {
     return {}
   },
   created() {
-this.checkLogin({path:'/login'})
-this.getNotebooks()
+    this.checkLogin({path: '/login'})
+    this.getNotebooks()
   },
 
   computed: {
@@ -70,7 +67,7 @@ this.getNotebooks()
         inputValue: notebook.title,
         inputErrorMessage: '标题不能为空，且不超过30个字符'
       }).then(({value}) => {
-        this.updateNotebook({ notebookId: notebook.id, title: value })
+        this.updateNotebook({notebookId: notebook.id, title: value})
       })
     },
     onDelete(notebook) {
@@ -79,7 +76,7 @@ this.getNotebooks()
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.deleteNotebook({ notebookId: notebook.id })
+        this.deleteNotebook({notebookId: notebook.id})
       })
     }
   }

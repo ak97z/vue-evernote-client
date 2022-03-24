@@ -31,11 +31,10 @@
 </template>
 
 <script>
-import Auth from '@/apis/auth'
 import NoteSidebar from '@/components/NoteSidebar'
 import _ from 'lodash'
 import MarkdownIt from 'markdown-it'
-import {mapState,mapActions, mapGetters, mapMutations} from 'vuex'
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 let md = new MarkdownIt()
 
@@ -51,20 +50,20 @@ export default {
     }
   },
   created() {
-this.checkLogin({path:'/login'})
+    this.checkLogin({path: '/login'})
 
   },
   computed: {
     ...mapGetters([
       'notes',
-      'curNote'
+      'curNote',
+      'curBook'
     ]),
     previewContent() {
       console.log(this.curNote.content || '')
       return md.render(this.curNote.content || '')
     }
   },
-
 
 
   methods: {
@@ -77,6 +76,7 @@ this.checkLogin({path:'/login'})
       'checkLogin'
     ]),
     onUpdateNote: _.debounce(function () {
+      if(!this.curNote.id) return
       this.updateNote({noteId: this.curNote.id, title: this.curNote.title, content: this.curNote.content})
         .then(data => {
           this.statusText = '已保存'
@@ -87,7 +87,13 @@ this.checkLogin({path:'/login'})
     onDeleteNote() {
       this.deleteNote({noteId: this.curNote.id})
         .then(data => {
-          this.$router.replace({path: '/note'})
+          this.$router.replace({
+            path: '/note',
+            query: {
+              noteId: this.notes[0].id,
+              notebookId: this.curBook.id
+            }
+          })
         })
     }
 

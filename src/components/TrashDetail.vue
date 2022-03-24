@@ -37,10 +37,8 @@
 </template>
 
 <script>
-import Auth from "../apis/auth";
 import MarkdownIt from 'markdown-it'
-import Trash from '@/apis/trash'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 let md = new MarkdownIt()
 export default {
@@ -49,11 +47,15 @@ export default {
   },
   created() {
     this.checkLogin({path: '/login'})
-this.getNotebooks()
+    this.getNotebooks()
     this.getTrashNotes()
-    .then(()=>{
-this.setCurTrashNote({curTrashNoteId:this.$route.query.noteId})
-    })
+      .then(() => {
+        this.setCurTrashNote({curTrashNoteId: this.$route.query.noteId})
+        this.$router.replace({
+path:'/trash',
+query:{noteId:this.curTrashNote.id}
+        })
+      })
   },
   computed: {
     ...mapGetters([
@@ -77,19 +79,54 @@ this.setCurTrashNote({curTrashNoteId:this.$route.query.noteId})
       'getNotebooks'
     ]),
     onDelete() {
-      console.log('delete')
-      this.deleteTrashNote({noteId: this.curTrashNote.id})
+//没有确认彻底删除弹窗
+      return this.deleteTrashNote({ noteId: this.curTrashNote.id })
+        .then(() => {
+          console.log('delete success')
+          this.setCurTrashNote()
+          this.$router.replace({
+            path: '/trash',
+            query: { noteId: this.curTrashNote.id }
+          })
+        })
+
+
+
+      //有确认彻底删除弹窗
+
+      // this.$confirm('删除后将无法恢复', '确定删除？', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // })
+      //   .then(() => {
+      //   return this.deleteTrashNote({ noteId: this.curTrashNote.id })
+      // }).then(() => {
+      //   console.log('delete success')
+      //   this.setCurTrashNote()
+      //   this.$router.replace({
+      //     path: '/trash',
+      //     query: { noteId: this.curTrashNote.id }
+      //   })
+      // })
+
     },
 
     onRevert() {
       this.revertTrashNote({noteId: this.curTrashNote.id})
-      console.log('revert')
+        .then(() => {
+          this.setCurTrashNote()
+          this.$router.replace({
+            path: '/trash',
+            query: { noteId: this.curTrashNote.id }
+          })
+        })
     }
   },
-    beforeRouteUpdate(to, from, next) {
-      this.setCurTrashNote({curTrashNoteId: to.query.noteId})
-      next()
-    }
+  beforeRouteUpdate(to, from, next) {
+    this.setCurTrashNote({curTrashNoteId: to.query.noteId})
+    next()
+  }
 
 }
 </script>

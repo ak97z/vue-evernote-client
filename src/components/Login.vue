@@ -32,9 +32,7 @@
 
 <script>
 
-import Auth from '@/apis/auth'
-import bus from '@/helpers/bus'
-import { mapGetters, mapActions } from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   data() {
@@ -59,8 +57,8 @@ export default {
   },
   methods: {
     ...mapActions({
-loginUser:'login',
-registerUser:'register'
+      loginUser: 'login',
+      registerUser: 'register'
     }),
     showRegister() {
       this.isShowLogin = false
