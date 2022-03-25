@@ -13,7 +13,7 @@
               <span>{{ notebook.noteCounts }}</span>
               <span class="action" @click.stop.prevent="onEdit(notebook)">编辑</span>
               <span class="action" @click.stop.prevent="onDelete(notebook)">删除</span>
-              <span class="date">{{ notebook.friendlyCreatedAt }}</span>
+              <span class="date">{{ notebook.createdAtFriendly }}</span>
             </div>
           </router-link>
         </div>
@@ -27,7 +27,6 @@
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-  name: 'Login',
   data() {
     return {}
   },
@@ -56,6 +55,7 @@ export default {
         inputErrorMessage: '标题不能为空，且不超过30个字符'
       }).then(({value}) => {
         this.addNotebook({title: value})
+
       })
     },
     onEdit(notebook) {
@@ -68,6 +68,7 @@ export default {
         inputErrorMessage: '标题不能为空，且不超过30个字符'
       }).then(({value}) => {
         this.updateNotebook({notebookId: notebook.id, title: value})
+
       })
     },
     onDelete(notebook) {
