@@ -26,6 +26,7 @@
 </template>
 
 <script>
+
 import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 
@@ -34,10 +35,10 @@ export default {
     this.getNotebooks()
       .then(() => {
         this.setCurBook({curBookId: this.$route.query.notebookId})
-        return this.getNotes({notebookId: this.curBook.id})
+        if(this.curBook.id) return this.getNotes({notebookId: this.curBook.id})
       }).then(() => {
       this.setCurNote({curNoteId: this.$route.query.noteId})
-    })
+
     this.$router.replace({
       path: '/note',
       query: {
@@ -45,8 +46,7 @@ export default {
         notebookId: this.curBook.id
       }
     })
-    // this.$store.commit('setCurBook', {curBookId: this.$route.query.notebookId})
-    // this.getNotes({notebookId: this.curBook.id})
+    })
   },
 
   data() {
